@@ -89,6 +89,7 @@ $app->register(Spatie\Backup\BackupServiceProvider::class);
 $app->register(Spatie\Activitylog\ActivitylogServiceProvider::class);
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 $app->register(Intervention\Image\ImageServiceProvider::class);
+$app->register(Sentry\SentryLaravel\SentryLumenServiceProvider::class);
 
 //local Packages
 $app->register(App\Providers\AppServiceProvider::class);

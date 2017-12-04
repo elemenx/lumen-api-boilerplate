@@ -17,7 +17,8 @@
         "nordsoftware/lumen-cors": "^2.2",
         "illuminate/redis": "^5.5",
         "overtrue/easy-sms": "^0.0.10",
-        "laravelista/lumen-vendor-publish": "^2.1"
+        "laravelista/lumen-vendor-publish": "^2.1",
+        "sentry/sentry-laravel": "^0.8.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
