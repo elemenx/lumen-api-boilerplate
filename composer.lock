@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c483fe0d023d83f96ace249a0016a841",
+    "content-hash": "5eb8018e28bd3e3aa78232dd7ac5eb29",
     "packages": [
         {
             "name": "anahkiasen/underscore-php",
@@ -175,6 +175,50 @@
                 "php"
             ],
             "time": "2017-11-29T15:34:25+00:00"
+        },
+        {
+            "name": "branchzero/lumen-advanced-route",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/branchzero/lumen-advanced-route.git",
+                "reference": "07e583fbb507396da4ac717a05c96bdfb1679624"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/branchzero/lumen-advanced-route/07e583fbb507396da4ac717a05c96bdfb1679624.zip",
+                "reference": "07e583fbb507396da4ac717a05c96bdfb1679624",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/lumen-framework": "^5.5",
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "BranchZero\\AdvancedRoute\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "BranchZero Sun",
+                    "email": "branchzero@gmail.com"
+                }
+            ],
+            "description": "Add Support For Nested Group && Resource.",
+            "keywords": [
+                "Match",
+                "any",
+                "group",
+                "lumen",
+                "route"
+            ],
+            "time": "2017-12-05T19:49:12+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -6068,7 +6112,8 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "laravel/lumen-framework": 20,
-        "tymon/jwt-auth": 5
+        "tymon/jwt-auth": 5,
+        "branchzero/lumen-advanced-route": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

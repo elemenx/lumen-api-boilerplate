@@ -19,7 +19,7 @@ try {
 |
 */
 
-$app = new Laravel\Lumen\Application(
+$app = new BranchZero\AdvancedRoute\Application(
     realpath(__DIR__.'/../')
 );
 
