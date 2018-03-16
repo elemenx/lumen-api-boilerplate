@@ -31,37 +31,37 @@ class SMSService
 
     public function verifyCode($code)
     {
-        $attempts = Cache::get('mobile_attempts_'.$this->mobile, 0);
+        $attempts = Cache::get('mobile_attempts_' . $this->mobile, 0);
         if ($attempts > $this->config['code']['max_attempts']) {
             return false;
         }
         if ($this->getCode() == $code) {
-            Cache::forget('mobile_check_'.$this->mobile);
-            Cache::forget('mobile_attempts_'.$this->mobile);
+            Cache::forget('mobile_check_' . $this->mobile);
+            Cache::forget('mobile_attempts_' . $this->mobile);
             return true;
         }
         $attempts++;
-        Cache::put('mobile_attempts_'.$this->mobile, $attempts, $this->config['code']['ttl']);
+        Cache::put('mobile_attempts_' . $this->mobile, $attempts, $this->config['code']['ttl']);
         return false;
     }
 
     public function getCode($refresh = false)
     {
-        if ($refresh || !Cache::has('mobile_check_'.$this->mobile)) {
+        if ($refresh || !Cache::has('mobile_check_' . $this->mobile)) {
             $code = str_pad(
                 mt_rand(
                     1,
                     str_repeat(9, $this->config['code']['length'])
                 ),
                 $this->config['code']['length'],
-                "0",
+                '0',
                 STR_PAD_LEFT
             );
-            Cache::forget('mobile_attempts_'.$this->mobile);
-            Cache::put('mobile_check_'.$this->mobile, $code, $this->config['code']['ttl']);
+            Cache::forget('mobile_attempts_' . $this->mobile);
+            Cache::put('mobile_check_' . $this->mobile, $code, $this->config['code']['ttl']);
             return $code;
         }
-        return Cache::get('mobile_check_'.$this->mobile);
+        return Cache::get('mobile_check_' . $this->mobile);
     }
 
     public function code()
@@ -70,9 +70,9 @@ class SMSService
             return false;
         }
         $code = $this->getCode(true);
-        $this->log('code', ['code' => $code]);
+        // $this->log('code', ['code' => $code]);
 
-        return $this->instance->send($this->mobile, new CodeMessage($code));
+        // return $this->instance->send($this->mobile, new CodeMessage($code));
     }
 
     public function send($template, $params = [])
@@ -84,7 +84,7 @@ class SMSService
 
         return $this->instance->send($this->mobile, [
             'template' => $template,
-            'data' => $params
+            'data'     => $params
         ]);
     }
 
@@ -96,5 +96,22 @@ class SMSService
             'template' => $template,
             'data'     => $params
         ]);
+    }
+
+    public function initToken()
+    {
+        Cache::put('mobile_token_' . $this->mobile, str_random(64), $this->config['code']['ttl']);
+
+        return $this;
+    }
+
+    public function getToken()
+    {
+        return Cache::get('mobile_token_' . $this->mobile);
+    }
+
+    public function delToken()
+    {
+        return Cache::forget('mobile_token_' . $this->mobile);
     }
 }

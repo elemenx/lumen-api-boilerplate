@@ -1,0 +1,15 @@
+before_script:
+  - bash .gitlab-ci.sh
+
+variables:
+  MYSQL_DATABASE: project_name
+  MYSQL_ROOT_PASSWORD: secret
+  GIT_SUBMODULE_STRATEGY: recursive
+
+phpunit:
+  image: elemenx/php-gitlab-ci:latest
+  services:
+    - mysql:5.7
+    - redis:latest
+  script:
+    - ./phpunit.sh

@@ -13,6 +13,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 {
     use Authenticatable, Authorizable;
 
+    protected $guarded = [];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -36,7 +38,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      *
      * @return mixed
      */
-    public function getJWTIdentifier() {
+    public function getJWTIdentifier()
+    {
         return $this->getKey(); // Eloquent Model method
     }
 
@@ -45,7 +48,17 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      *
      * @return array
      */
-    public function getJWTCustomClaims() {
+    public function getJWTCustomClaims()
+    {
         return [];
+    }
+
+    public function own(Model $model, $check_column = 'user_id')
+    {
+        if (isset($model[$check_column]) && $model[$check_column] == $this->id) {
+            return true;
+        }
+
+        return false;
     }
 }

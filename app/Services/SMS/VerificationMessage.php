@@ -4,8 +4,6 @@ namespace App\Services\SMS;
 
 use Overtrue\EasySms\Message;
 use Overtrue\EasySms\Contracts\GatewayInterface;
-use Overtrue\EasySms\Strategies\OrderStrategy;
-use Overtrue\EasySms\Gateways\AlidayuGateway;
 
 class VerificationMessage extends Message
 {
@@ -26,7 +24,7 @@ class VerificationMessage extends Message
     public function getData(GatewayInterface $gateway = null)
     {
         $params = $gateway->getConfig()['code']['params'];
-        $params['code'] =  $this->code;
+        $params['code'] = $this->code;
         return $params;
     }
 }

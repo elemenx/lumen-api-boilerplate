@@ -5,7 +5,6 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
-use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -34,8 +33,8 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $e)
     {
-        if (config('app.env') == 'production' && app()->bound('sentry') && $this->shouldReport($exception)) {
-            app('sentry')->captureException($exception);
+        if (in_array(env('APP_ENV'), ['production', 'testing']) && app()->bound('sentry') && $this->shouldReport($e)) {
+            app('sentry')->captureException($e);
         }
 
         parent::report($e);
@@ -50,14 +49,35 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        
-        if ($e instanceof AuthorizationException) {
-            if ($e->getPrevious() instanceof TokenExpiredException) {
-                return response()->json(['token_expired'], $e->getStatusCode());
-            } elseif ($e->getPrevious() instanceof TokenInvalidException) {
-                return response()->json(['token_invalid'], $e->getStatusCode());
-            }
+        $message = trans_fb('exception.' . get_class($e), $e->getMessage());
+        if (empty($message)) {
+            $message = trans('exception.system_error');
         }
-        return parent::render($request, $e);
+
+        $rendered = parent::render($request, $e);
+
+        $statusCode = method_exists($e, 'getStatusCode')
+            ? $e->getStatusCode()
+            : 500;
+
+        $data = [
+            'code'    => $statusCode,
+            'message' => $message
+        ];
+
+        if (env('APP_DEBUG')) {
+            $data['data'] = [
+                'trace' => explode("\n", str_replace("\r\n", "\n", $e->getTraceAsString()))
+            ];
+        }
+
+        if ($e instanceof ValidationException) {
+            $data['code'] = 422;
+            $data['data'] = [
+                'fields' => $e->validator->errors()
+            ];
+        }
+
+        return response()->json($data, $statusCode);
     }
 }

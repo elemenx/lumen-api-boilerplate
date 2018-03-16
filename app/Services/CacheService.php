@@ -3,13 +3,6 @@
 namespace App\Services;
 
 use Cache;
-use App\Models\AD;
-use App\Models\Slide;
-use App\Models\Package;
-use App\Models\Category;
-use App\Models\Setting;
-use App\Models\SettingCategory;
-use App\Models\Announcement;
 
 class CacheService
 {
@@ -62,11 +55,14 @@ class CacheService
 
     public static function __callStatic($name, $arguments)
     {
-        if (!class_exists('\App\\Models\\'.studly_case($name))) {
+        if (!class_exists('\App\\Models\\' . studly_case($name))) {
             return [];
         }
-        $model = 'App\\Models\\'.studly_case($name);
+        $model = 'App\\Models\\' . studly_case($name);
         $model = new $model();
+
+        $key = isset($model->cacheOptions['key']) ? $model->cacheOptions['key'] : 'id';
+
         if (isset($model->cacheOptions)) {
             if (isset($model->cacheOptions['order'])) {
                 $model = $model->orderBy($model->cacheOptions['order'], $model->cacheOptions['sort'] ? $model->cacheOptions['sort'] : 'ASC');
@@ -83,7 +79,11 @@ class CacheService
                     }
                 }
             }
+            if (isset($model->cacheOptions['select'])) {
+                $model = $model->select($model->cacheOptions['select']);
+            }
         }
-        return $model->get()->keyBy($model->cacheOptions['key'] ? $model->cacheOptions['key'] : 'id')->toArray();
+
+        return $model->get()->keyBy($key)->toArray();
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 try {
-    (new Dotenv\Dotenv(__DIR__.'/../'))->load();
+    (new Dotenv\Dotenv(__DIR__ . '/../'))->load();
 } catch (Dotenv\Exception\InvalidPathException $e) {
     //
 }
@@ -19,8 +19,8 @@ try {
 |
 */
 
-$app = new BranchZero\AdvancedRoute\Application(
-    realpath(__DIR__.'/../')
+$app = new ElemenX\AdvancedRoute\Application(
+    realpath(__DIR__ . '/../')
 );
 
 $app->withFacades();
@@ -90,11 +90,19 @@ $app->register(Spatie\Activitylog\ActivitylogServiceProvider::class);
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 $app->register(Intervention\Image\ImageServiceProvider::class);
 $app->register(Sentry\SentryLaravel\SentryLumenServiceProvider::class);
+$app->register(ElemenX\ApiPagination\PaginationServiceProvider::class);
 
 //local Packages
 $app->register(App\Providers\AppServiceProvider::class);
-$app->register(App\Providers\AuthServiceProvider::class);
+$app->register(App\Providers\DatabaseServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
+
+$app->singleton(
+    Illuminate\Contracts\Filesystem\Factory::class,
+    function ($app) {
+        return new Illuminate\Filesystem\FilesystemManager($app);
+    }
+);
 
 /*
 |--------------------------------------------------------------------------
@@ -110,7 +118,7 @@ $app->register(App\Providers\AuthServiceProvider::class);
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
 ], function ($router) {
-    require __DIR__.'/../routes/api.php';
+    require __DIR__ . '/../routes/api.php';
 });
 
 return $app;
