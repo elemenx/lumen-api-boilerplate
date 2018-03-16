@@ -17,6 +17,3 @@ cp .env.testing .env
 # Generate an application key
 APP_KEY=$(generate_app_key)
 sed -i -e s/APP_KEY=.*$/APP_KEY=${APP_KEY}/g .env
-
-# Run database migrations.
-php artisan test:import
