@@ -85,8 +85,6 @@ $app->routeMiddleware([
 $app->register(Illuminate\Redis\RedisServiceProvider::class);
 $app->register(Illuminate\Filesystem\FilesystemServiceProvider::class);
 $app->register(Nord\Lumen\Cors\CorsServiceProvider::class);
-$app->register(Spatie\Backup\BackupServiceProvider::class);
-$app->register(Spatie\Activitylog\ActivitylogServiceProvider::class);
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 $app->register(Intervention\Image\ImageServiceProvider::class);
 $app->register(Sentry\SentryLaravel\SentryLumenServiceProvider::class);
