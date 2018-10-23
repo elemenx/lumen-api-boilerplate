@@ -1,7 +1,6 @@
 
-# Elemenx API Starter
+# Elemenx - Lumen API Boilerplate
 
-## Pending
+## How to 
 
- - User Table Migration && Related Controllers
- - SMS Refactor
+Use it with `composer create-project elemenx/lumen-api-boilerplate --stability=dev portal`
