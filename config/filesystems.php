@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Default Filesystem Disk
@@ -42,32 +41,44 @@ return [
     */
 
     'disks' => [
-
         'local' => [
             'driver' => 'local',
-            'root' => storage_path('app'),
+            'root'   => storage_path('app'),
         ],
 
         'public' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public'),
-            'url' => env('API_URL').'/storage',
+            'driver'     => 'local',
+            'root'       => storage_path('app/public'),
+            'url'        => env('API_URL') . '/storage',
             'visibility' => 'public',
         ],
 
         'backup' => [
             'driver' => 'local',
-            'root' => storage_path('backups'),
+            'root'   => storage_path('backups'),
         ],
 
         's3' => [
             'driver' => 's3',
-            'key' => env('AWS_KEY'),
+            'key'    => env('AWS_KEY'),
             'secret' => env('AWS_SECRET'),
             'region' => env('AWS_REGION'),
             'bucket' => env('AWS_BUCKET'),
         ],
 
+        'cosv5' => [
+            'driver'      => 'cosv5',
+            'region'      => env('COSV5_REGION', 'gz'),
+            'credentials' => [
+                'appId'     => env('COSV5_APP_ID'),
+                'secretId'  => env('COSV5_SECRET_ID'),
+                'secretKey' => env('COSV5_SECRET_KEY'),
+            ],
+            'timeout'         => env('COSV5_TIMEOUT', 60),
+            'connect_timeout' => env('COSV5_CONNECT_TIMEOUT', 60),
+            'bucket'          => env('COSV5_BUCKET'),
+            'cdn'             => env('COSV5_CDN'),
+            'img_prefix'      => env('COSV5_IMG_PREFIX')
+        ],
     ],
-
 ];
