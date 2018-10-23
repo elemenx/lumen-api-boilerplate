@@ -1,5 +1,5 @@
 {
-    "name": "elemenx/api-starter",
+    "name": "elemenx/lumen-api-boilerplate",
     "description": "API Boilerplate Based on Lumen",
     "keywords": ["framework", "laravel", "lumen"],
     "license": "MIT",
