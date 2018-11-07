@@ -4,6 +4,27 @@ namespace App\Essential\Services;
 
 class CosService
 {
+    public static function getObjectKeys($obj)
+    {
+        $list = array_keys($obj);
+        sort($list);
+        return $list;
+    }
+
+    public static function obj2str($obj)
+    {
+        $list = [];
+        $keyList = self::getObjectKeys($obj);
+        $len = count($keyList);
+        for ($i = 0; $i < $len; $i++) {
+            $key = $keyList[$i];
+            $val = isset($obj[$key]) ? $obj[$key] : '';
+            $key = strtolower($key);
+            $list[] = rawurlencode($key) . '=' . rawurlencode($val);
+        }
+        return implode('&', $list);
+    }
+
     /*
      * 获取签名
      * @param string $method 请求类型 method
@@ -22,26 +43,6 @@ class CosService
         $pathname = $pathname ? $pathname : '/';
         substr($pathname, 0, 1) != '/' && ($pathname = '/' . $pathname);
 
-        // 工具方法
-        function getObjectKeys($obj)
-        {
-            $list = array_keys($obj);
-            sort($list);
-            return $list;
-        }
-        function obj2str($obj)
-        {
-            $list = [];
-            $keyList = getObjectKeys($obj);
-            $len = count($keyList);
-            for ($i = 0; $i < $len; $i++) {
-                $key = $keyList[$i];
-                $val = isset($obj[$key]) ? $obj[$key] : '';
-                $key = strtolower($key);
-                $list[] = rawurlencode($key) . '=' . rawurlencode($val);
-            }
-            return implode('&', $list);
-        }
         // 签名有效起止时间
         $now = time() - 1;
         $expired = $now + 600; // 签名过期时刻，600 秒后
@@ -51,14 +52,14 @@ class CosService
         $qAk = $SecretId;
         $qSignTime = $now . ';' . $expired;
         $qKeyTime = $now . ';' . $expired;
-        $qHeaderList = strtolower(implode(';', getObjectKeys($headers)));
-        $qUrlParamList = strtolower(implode(';', getObjectKeys($query)));
+        $qHeaderList = strtolower(implode(';', self::getObjectKeys($headers)));
+        $qUrlParamList = strtolower(implode(';', self::getObjectKeys($query)));
 
         // 签名算法说明文档：https://www.qcloud.com/document/product/436/7778
         // 步骤一：计算 SignKey
         $signKey = hash_hmac('sha1', $qSignTime, $SecretKey);
         // 步骤二：构成 FormatString
-        $formatString = implode("\n", [strtolower($method), $pathname, obj2str($query), obj2str($headers), '']);
+        $formatString = implode("\n", [strtolower($method), $pathname, self::obj2str($query), self::obj2str($headers), '']);
         // 步骤三：计算 StringToSign
         $stringToSign = implode("\n", ['sha1', $qSignTime, sha1($formatString), '']);
         // 步骤四：计算 Signature
